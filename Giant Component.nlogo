@@ -55,7 +55,7 @@ to go
   color-giant-component
 
   ask links [
-    set color gray
+    set color gray ; Gray by default
     if [color] of end1 = red [set color [color] of end1 ]
     if [color] of end2 = red [set color [color] of end2 ]
 
