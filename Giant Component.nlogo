@@ -107,13 +107,17 @@ to randdisco
   if count (turtles with [ Disconnected? ])= 0 [stop]
   if die_percent < random(100) [stop]
   if die_percent >= random(100)[
-  ask one-of turtles with [Disconnected?]
-  ;;
+    let dienode one-of turtles with [Disconnected?] ; node who will disconnect
+  ask dienode
    [ask my-links
-     ;;die and
-     [ask other-end
+     [let oth other-end
+       ask oth
        [set explored? false]]die]
-  ]
+
+   set giant-component-size 0
+   ]
+
+
 
   ;;user-message count (turtles with [ Disconnected? ]) ;; Number of turltes disconnected
 end
@@ -268,7 +272,7 @@ num-nodes
 num-nodes
 2
 500
-12
+40
 1
 1
 NIL
@@ -350,25 +354,25 @@ NIL
 0
 
 SLIDER
-134
-469
-306
-502
+899
+14
+1071
+47
 n_disconnected
 n_disconnected
 0
 num-nodes
-8
+19
 1
 1
 NIL
 HORIZONTAL
 
 SWITCH
-49
-520
-183
-553
+922
+57
+1056
+90
 disconnect?
 disconnect?
 0
@@ -376,36 +380,37 @@ disconnect?
 -1000
 
 SLIDER
-245
-544
-417
-577
+1109
+14
+1281
+47
 die_percent
 die_percent
 0
 100
-67
+34
 1
 1
 NIL
 HORIZONTAL
 
-BUTTON
-97
-587
-160
-620
-deco
-deco
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
+PLOT
+921
+158
+1277
+431
+Evolution of the number of nodes
+Ticks
+Nodes
+0.0
+30.0
+0.0
+30.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 false "" "plotxy ticks count turtles"
 
 @#$#@#$#@
 ## WHAT IS IT?
