@@ -83,8 +83,9 @@ to find-all-components
   loop
   [
     ;; pick a node that has not yet been explored
-    let start one-of turtles with [ not explored? ]
+    let start one-of turtles with [ not explored?]
     if start = nobody [ stop ]
+    ask start [if Disconnected? = true [stop]]
     ;; reset the number of turtles found to 0
     ;; this variable is updated each time we explore an
     ;; unexplored node.
@@ -357,7 +358,7 @@ n_disconnected
 n_disconnected
 0
 num-nodes
-2
+8
 1
 1
 NIL
@@ -466,6 +467,7 @@ See other models in the Networks section of the Models Library, such as Preferen
 See also Network Example, in the Code Examples section.
 
 There is also a version of this model using the (NW extension)[https://github.com/NetLogo/NW-Extension] in the `demo` folder of the extension.
+
 
 ## CREDITS AND REFERENCES
 
