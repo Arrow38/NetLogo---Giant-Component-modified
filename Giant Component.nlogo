@@ -30,11 +30,6 @@ to setup
   reset-ticks
 end
 
-to deco
-  if disconnect?[greenturtle
-    randdisco]
-
-end
 
 to make-turtles
   create-turtles num-nodes [
@@ -103,6 +98,7 @@ to find-all-components
   ]
 end
 
+;;Chance to one node to disconnect with die_percent' percentage
 to randdisco
   if count (turtles with [ Disconnected? ])= 0 [stop]
   if die_percent < random(100) [stop]
@@ -116,10 +112,6 @@ to randdisco
 
    set giant-component-size 0
    ]
-
-
-
-  ;;user-message count (turtles with [ Disconnected? ]) ;; Number of turltes disconnected
 end
 
 ;;Color green the n_disconnected turtles
@@ -143,8 +135,6 @@ to explore [new-color]  ;; node procedure
   set component-size component-size + 1
   ;; color the node
   if color != green [set color new-color] ;;Don't color if disconnected, we need to follow disconnected element
-  ;;if color = green  [if [color of ask [link-neighbors]= red] [set color red]]
-  ;;set color new-color
   ask link-neighbors [ explore new-color ]
 end
 
@@ -413,6 +403,35 @@ PENS
 "default" 1.0 0 -16777216 false "" "plotxy ticks count turtles"
 
 @#$#@#$#@
+## Module "Disconnect"
+On a intégré au réseau la capacité de modifier certains agents présents afin de leur donner la possibilité de se déconnecter. Ces agents normalement colorés en rouge ou en gris
+se retrouve en vert afin de bien les différencier avec le reste du groupe.
+
+Le module se situe sur la partie droite de l'interface avec :
+
+- n_disconnected correspondant au nombre d'agents en vert à l'initialisation.
+- ?disconnect permettant d'activer ou non le module.
+- die_percent le pourcentage de déconnexion à chaque tick d'un agent vert.
+- un graphique retraçant l'évolution de la population des noeuds en fonctions du nombre de ticks.
+
+La difficulté consiste à reconstruire le graphique de "component" après chaque déconnexion d'un noeud et de pouvoir faire interragir le système avec les nouveaux
+comportements de ces agents modifiés.
+
+Pour celà, il a fallut dans un premier temps modifier le code existant pour ajouter des exceptions pour:
+- ne pas changer de couleur la population "verte" .
+- colorier du mieux possible les nouveaux types de lien (vert-gris , vert-vert , vert-rouge).
+
+Plus important, il ne faut pas oublier le but de cette simulation :
+- obtenir un réseau complètement connecté.
+- obtenir la taille du plus grand "component" à chaque tick.
+
+Pour rester dans l'objectif, à chaque déconnexion, les opérations suivantes sont nécessaires en plus de la simple disparition du noeud:
+- les noeuds auquels le noeud qui va se déconnecter est relié est remis comme étant inexploré (pour signaler qu'il peut à nouveau être relié à un nouveau noeud).
+- on redémarre la taille du plus grand "component" enregistré afin de rechercher la nouvelle taille.
+
+
+
+
 ## WHAT IS IT?
 
 In a network, a "component" is a group of nodes (people) that are all connected to each other, directly or indirectly.  So if a network has a "giant component", that means almost every node is reachable from almost every other.  This model shows how quickly a giant component arises if you grow a random network.
