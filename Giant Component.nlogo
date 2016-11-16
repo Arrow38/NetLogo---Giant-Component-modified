@@ -5,6 +5,7 @@ turtles-own
   ;; disco
   Disconnected?
 ]
+
 globals
 [
   compteur
@@ -29,6 +30,11 @@ to setup
   reset-ticks
 end
 
+to deco
+  if disconnect?[greenturtle
+    randdisco]
+
+end
 
 to make-turtles
   create-turtles num-nodes [
@@ -97,12 +103,17 @@ to find-all-components
 end
 
 to randdisco
-  ask turtles [set Disconnected? true]
+  if count (turtles with [ Disconnected? ])= 0 [stop]
   if die_percent < random(100) [stop]
-  ;if die_percent >= random(100) [ask turtles with [Disconnected?] [
-      ;ask in-link-neighbors [set explored? false]
-   ;   die]
-  ;]
+  if die_percent >= random(100)[
+  ask one-of turtles with [Disconnected?]
+  ;;
+   [ask my-links
+     ;;die and
+     [ask other-end
+       [set explored? false]]die]
+  ]
+
   ;;user-message count (turtles with [ Disconnected? ]) ;; Number of turltes disconnected
 end
 
@@ -119,6 +130,7 @@ to greenturtle
 end
 
 
+
 ;; Finds all turtles reachable from this node (and recolors them)
 to explore [new-color]  ;; node procedure
   if explored? [ stop ]
@@ -126,9 +138,11 @@ to explore [new-color]  ;; node procedure
   set component-size component-size + 1
   ;; color the node
   if color != green [set color new-color] ;;Don't color if disconnected, we need to follow disconnected element
+  ;;if color = green  [if [color of ask [link-neighbors]= red] [set color red]]
   ;;set color new-color
   ask link-neighbors [ explore new-color ]
 end
+
 
 to disconnect
   if Disconnected? [stop]
@@ -253,7 +267,7 @@ num-nodes
 num-nodes
 2
 500
-80
+12
 1
 1
 NIL
@@ -343,7 +357,7 @@ n_disconnected
 n_disconnected
 0
 num-nodes
-30
+2
 1
 1
 NIL
@@ -375,23 +389,22 @@ die_percent
 NIL
 HORIZONTAL
 
-PLOT
-1014
-270
-1214
-420
-number of disconnected
-turtles
+BUTTON
+97
+587
+160
+620
+deco
+deco
 NIL
-0.0
-100.0
-0.0
-10.0
-true
-false
-"" ""
-PENS
-"default" 1.0 0 -16777216 true "" "plot count turtles"
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
